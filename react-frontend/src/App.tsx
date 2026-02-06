@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import Excel2Json from './pages/Excel2Json.tsx';
+import Json2Excel from './pages/Json2Excel.tsx';
 import AddPrefixes2Expression from './pages/AddPrefixes2Expression.tsx';
 
 export const App: React.FC = () => {
@@ -10,6 +11,7 @@ export const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Excel2Json />} />
+          <Route path="json2excel" element={<Json2Excel />} />
           <Route path="ap2e" element={<AddPrefixes2Expression />} />
         </Route>
       </Routes>

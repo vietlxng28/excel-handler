@@ -156,4 +156,74 @@ public class ExcelParserService {
 
         return NON_ALPHANUMERIC_PATTERN.matcher(normalized).replaceAll("");
     }
+
+    public byte[] jsonToExcel(List<Map<String, Object>> jsonData) {
+        try (Workbook workbook = new XSSFWorkbook();
+                java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream()) {
+
+            Sheet sheet = workbook.createSheet("Data");
+
+            if (jsonData == null || jsonData.isEmpty()) {
+                workbook.write(out);
+                return out.toByteArray();
+            }
+
+            // 1. Collect all unique keys for headers
+            Set<String> headers = new LinkedHashSet<>();
+            for (Map<String, Object> rowData : jsonData) {
+                if (rowData != null) {
+                    headers.addAll(rowData.keySet());
+                }
+            }
+            List<String> headerList = new ArrayList<>(headers);
+
+            // 2. Create Header Row
+            Row headerRow = sheet.createRow(0);
+            CellStyle headerStyle = workbook.createCellStyle();
+            Font font = workbook.createFont();
+            font.setBold(true);
+            headerStyle.setFont(font);
+
+            for (int i = 0; i < headerList.size(); i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(headerList.get(i));
+                cell.setCellStyle(headerStyle);
+            }
+
+            // 3. Fill Data
+            int rowIndex = 1;
+            for (Map<String, Object> rowData : jsonData) {
+                Row row = sheet.createRow(rowIndex++);
+                for (int i = 0; i < headerList.size(); i++) {
+                    String key = headerList.get(i);
+                    Object value = rowData.get(key);
+                    Cell cell = row.createCell(i);
+                    setCellValue(cell, value);
+                }
+            }
+
+            // 4. Auto-size columns
+            for (int i = 0; i < headerList.size(); i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            workbook.write(out);
+            return out.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error generating Excel file: " + e.getMessage());
+        }
+    }
+
+    private void setCellValue(Cell cell, Object value) {
+        if (value == null) {
+            cell.setBlank();
+        } else if (value instanceof Number) {
+            cell.setCellValue(((Number) value).doubleValue());
+        } else if (value instanceof Boolean) {
+            cell.setCellValue((Boolean) value);
+        } else {
+            cell.setCellValue(value.toString());
+        }
+    }
 }

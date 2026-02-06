@@ -8,6 +8,7 @@ export interface ApiConfig {
   headers?: Record<string, string>;
   requireAuth?: boolean;
   retryOnAuthFailure?: boolean;
+  responseType?: 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
 }
 
 export type Payload = any;
@@ -152,6 +153,7 @@ export const callAPI = async <T = any>(
     timeout: apiConfig.timeout ?? 10000,
     headers: { ...(apiConfig.headers || {}) },
     requireAuth: apiConfig.requireAuth,
+    responseType: apiConfig.responseType,
     _retry: false,
   };
 

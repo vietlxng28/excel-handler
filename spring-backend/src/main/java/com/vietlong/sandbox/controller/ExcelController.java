@@ -45,4 +45,20 @@ public class ExcelController {
             return ResponseEntity.internalServerError().body("Lỗi hệ thống: " + e.getMessage());
         }
     }
+
+    @Operation(summary = "Convert JSON to Excel")
+    @PostMapping(value = "/json-to-excel")
+    public ResponseEntity<?> convertJsonToExcel(@RequestBody List<Map<String, Object>> jsonData) {
+        try {
+            byte[] excelBytes = excelParserService.jsonToExcel(jsonData);
+
+            return ResponseEntity.ok()
+                    .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=data.xlsx")
+                    .contentType(MediaType
+                            .parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                    .body(excelBytes);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
+        }
+    }
 }

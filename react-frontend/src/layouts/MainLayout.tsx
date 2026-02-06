@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Layout, Menu, theme, Button, Typography } from 'antd';
-import { UploadOutlined, CalculatorOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import { UploadOutlined, CalculatorOutlined, MenuUnfoldOutlined, MenuFoldOutlined, FileExcelOutlined } from '@ant-design/icons';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
@@ -19,6 +19,11 @@ const MainLayout: React.FC = () => {
       key: '/',
       icon: <UploadOutlined />,
       label: 'Excel2Json',
+    },
+    {
+      key: '/json2excel',
+      icon: <FileExcelOutlined />,
+      label: 'Json2Excel',
     },
     {
       key: '/ap2e',
