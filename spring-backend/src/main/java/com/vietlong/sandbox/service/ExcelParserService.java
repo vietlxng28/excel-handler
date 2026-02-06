@@ -168,7 +168,7 @@ public class ExcelParserService {
                 return out.toByteArray();
             }
 
-            // 1. Collect all unique keys for headers
+           
             Set<String> headers = new LinkedHashSet<>();
             for (Map<String, Object> rowData : jsonData) {
                 if (rowData != null) {
@@ -177,7 +177,7 @@ public class ExcelParserService {
             }
             List<String> headerList = new ArrayList<>(headers);
 
-            // 2. Create Header Row
+           
             Row headerRow = sheet.createRow(0);
             CellStyle headerStyle = workbook.createCellStyle();
             Font font = workbook.createFont();
@@ -190,7 +190,7 @@ public class ExcelParserService {
                 cell.setCellStyle(headerStyle);
             }
 
-            // 3. Fill Data
+           
             int rowIndex = 1;
             for (Map<String, Object> rowData : jsonData) {
                 Row row = sheet.createRow(rowIndex++);
@@ -202,7 +202,7 @@ public class ExcelParserService {
                 }
             }
 
-            // 4. Auto-size columns
+           
             for (int i = 0; i < headerList.size(); i++) {
                 sheet.autoSizeColumn(i);
             }
